@@ -71,7 +71,7 @@ const actions = {
   },
 
   // getStatusr bot executes
-  ['getStatus'](sessionId, context, cb) {
+  ['getStatus'](context, cb) {
     // Here should go the api call, e.g.:
     // context.forecast = apiCall(context.loc)
     if (context.entities) {
@@ -92,7 +92,6 @@ const actions = {
         } else {
           context.msg = 'ไม่ทราบ';
         }
-        sessions[sessionId].context = context;
         cb(context);
       });
     } else {
