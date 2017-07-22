@@ -11,7 +11,7 @@ const FB_PAGE_TOKEN = process.env.FB_PAGE_TOKEN;
 
 var FB_VERIFY_TOKEN = process.env.FB_VERIFY_TOKEN;
 if (!FB_VERIFY_TOKEN) {
-  FB_VERIFY_TOKEN = "just_do_it";
+  FB_VERIFY_TOKEN = "varee_cout_developer_fb";
 }
 
 module.exports = {
