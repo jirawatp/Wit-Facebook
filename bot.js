@@ -5,6 +5,8 @@
 const Wit = require('node-wit').Wit;
 const FB = require('./facebook.js');
 const Config = require('./const.js');
+const _ = require('lodash');
+const request = require('request');
 
 const firstEntityValue = (entities, entity) => {
   const val = entities && entities[entity] &&
@@ -68,12 +70,34 @@ const actions = {
     console.log(error.message);
   },
 
-  // fetch-weather bot executes
-  ['fetch-weather'](sessionId, context, cb) {
+  // getStatusr bot executes
+  ['getStatus'](sessionId, context, cb) {
     // Here should go the api call, e.g.:
     // context.forecast = apiCall(context.loc)
-    context.forecast = 'sunny';
-    cb(context);
+    if (context.entities) {
+      var entities = context.entities;
+      var location = entityValue(entities, "loc");
+
+      request({
+          url: 'http://varee.info/api/floodDataService/getWaterLevelAtAllRoad'
+      }).then(function(result) {
+        var res = _.filter(result,function(item){
+          return item.name.indexOf(location)>-1;
+        });
+
+        if(res[0].status === '0') {
+          context.msg = 'ปกติ';
+        } else if(res[0].status === '1'){
+          context.msg = 'ไม่ปกติ';
+        } else {
+          context.msg = 'ไม่ทราบ';
+        }
+        sessions[sessionId].context = context;
+        cb(context);
+      });
+    } else {
+      cb(context);
+    }
   },
 };
 

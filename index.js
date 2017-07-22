@@ -9,7 +9,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const request = require('request');
-const _ = require('lodash');
 
 // get Bot, const, and Facebook API
 const bot = require('./bot.js');
@@ -127,35 +126,13 @@ app.post('/webhook', (req, res) => {
             //   delete sessions[sessionId];
             // }
 
-            if (context.entities) {
-              var entities = context.entities;
-              var location = entityValue(entities, "loc");
-
-              request({
-                  url: 'http://varee.info/api/floodDataService/getWaterLevelAtAllRoad'
-              }).then(function(result) {
-                var res = _.filter(result,function(item){
-                  return item.name.indexOf(location)>-1;
-                });
-
-                if(res[0].status === '0') {
-                  context.msg = 'ปกติ';
-                } else if(res[0].status === '1'){
-                  context.msg = 'ไม่ปกติ';
-                } else {
-                  context.msg = 'ไม่ทราบ';
-                }
-                sessions[sessionId].context = context;
-                res.sendStatus(200);
-              });
-            } else {
-              // Updating the user's current session state
-              sessions[sessionId].context = context;
-              res.sendStatus(200);
-            }
+            
+            // Updating the user's current session state
+            sessions[sessionId].context = context;
           }
         }
       );
     }
   }
+  res.sendStatus(200);
 });
