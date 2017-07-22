@@ -58,7 +58,7 @@ const actions = {
   },
   merge(sessionId, context, entities, message, cb) {
     // Retrieve the location entity and store it into a context field
-    const loc = firstEntityValue(entities, 'location');
+    const loc = firstEntityValue(entities, 'location') || entityValue(entities, "loc");
     if (loc) {
       context.loc = loc; // store it in context
     }
@@ -76,10 +76,10 @@ const actions = {
     // context.forecast = apiCall(context.loc)
     console.log("meeeeee");
     console.log(JSON.stringify(context));
-    if (context.entities) {
+    if (context.entities || context.loc) {
       var entities = context.entities;
       var location = entityValue(entities, "loc");
-      
+      console.log("meeeeee location");
       request({
           url: 'http://varee.info/api/floodDataService/getWaterLevelAtAllRoad'
       }).then(function(result) {
