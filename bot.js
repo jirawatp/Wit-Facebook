@@ -71,13 +71,13 @@ const actions = {
   },
 
   // getStatusr bot executes
-  ['getStatus'](context, cb) {
+  ['getStatus'](sessionId, context, cb) {
     // Here should go the api call, e.g.:
     // context.forecast = apiCall(context.loc)
     if (context.entities) {
       var entities = context.entities;
       var location = entityValue(entities, "loc");
-
+      
       request({
           url: 'http://varee.info/api/floodDataService/getWaterLevelAtAllRoad'
       }).then(function(result) {
@@ -92,6 +92,7 @@ const actions = {
         } else {
           context.msg = 'ไม่ทราบ';
         }
+        console.log(JSON.stringify(context));
         cb(context);
       });
     } else {
