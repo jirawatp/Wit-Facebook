@@ -74,6 +74,8 @@ const actions = {
   ['getStatus'](sessionId, context, cb) {
     // Here should go the api call, e.g.:
     // context.forecast = apiCall(context.loc)
+    console.log("meeeeee");
+    console.log(JSON.stringify(context));
     if (context.entities) {
       var entities = context.entities;
       var location = entityValue(entities, "loc");
