@@ -58,6 +58,7 @@ const actions = {
   },
   merge(sessionId, context, entities, message, cb) {
     // Retrieve the location entity and store it into a context field
+    console.log(entities);
     const loc = firstEntityValue(entities, 'location') || entityValue(entities, "loc");
     if (loc) {
       context.loc = loc; // store it in context
@@ -74,11 +75,6 @@ const actions = {
   ['getStatus'](sessionId, context, entities, message, cb) {
     // Here should go the api call, e.g.:
     // context.forecast = apiCall(context.loc)
-
-    const loc = firstEntityValue(entities, 'location') || entityValue(entities, "loc");
-    if (loc) {
-      context.loc = loc; // store it in context
-    }
     
     console.log("meeeeee");
     console.log(JSON.stringify(context));
