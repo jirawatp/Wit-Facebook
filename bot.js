@@ -22,8 +22,9 @@ const firstEntityValue = (entities, entity) => {
 // Bot actions
 const actions = {
   say(sessionId, context, message, cb) {
+    console.log("say");
     console.log(message);
-
+    
     // Bot testing mode, run cb() and return
     if (require.main === module) {
       cb();
@@ -56,32 +57,33 @@ const actions = {
       cb();
     }
   },
-  merge(sessionId, context, entities, message, cb) {
-    // Retrieve the location entity and store it into a context field
-    console.log('entities');
-    console.log(JSON.stringify(entities));
-    const loc = firstEntityValue(entities, 'location') || entityValue(entities, "loc");
-    if (loc) {
-      context.loc = loc; // store it in context
-    }
+  // merge(sessionId, context, entities, message, cb) {
+  //   // Retrieve the location entity and store it into a context field
+  //   console.log('entities');
+  //   console.log(JSON.stringify(entities));
+  //   const loc = firstEntityValue(entities, 'location') || entityValue(entities, "loc");
+  //   if (loc) {
+  //     context.loc = loc; // store it in context
+  //   }
 
-    cb(context);
-  },
+  //   cb(context);
+  // },
 
   error(sessionId, context, error) {
     console.log(error.message);
   },
 
   // getStatusr bot executes
-  ['getStatus'](sessionId, context, cb) {
+  ['getStatus'](sessionId, context, entities, cb) {
     // Here should go the api call, e.g.:
     // context.forecast = apiCall(context.loc)
     
     console.log("meeeeee");
     console.log(JSON.stringify(context));
-    if (context.entities || context.loc) {
-      var entities = context.entities;
-      var location = entityValue(entities, "loc");
+    console.log(JSON.stringify(entities));
+    if (context.entities || entities) {
+      var myEntities = context.entities || entities;
+      var location = entityValue(myEntities, "loc");
       console.log("meeeeee location");
       request({
           url: 'http://varee.info/api/floodDataService/getWaterLevelAtAllRoad'
@@ -91,11 +93,11 @@ const actions = {
         });
 
         if(res[0].status === '0') {
-          context.msg = 'ปกติ';
+          context.resultStatus = 'ปกติ';
         } else if(res[0].status === '1'){
-          context.msg = 'ไม่ปกติ';
+          context.resultStatus = 'ไม่ปกติ';
         } else {
-          context.msg = 'ไม่ทราบ';
+          context.resultStatus = 'ไม่ทราบ';
         }
         console.log(JSON.stringify(context));
         cb(context);
